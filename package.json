@@ -1,0 +1,22 @@
+{
+  "name": "com.welbe.welbecursodeingles",
+  "version": "1.0.0",
+  "description": "Welbe Curso de Inglês",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogenesjup/Welbe-Curso-de-Ingl-s.git"
+  },
+  "keywords": [
+    "tepping"
+  ],
+  "author": "Welbe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diogenesjup/Welbe-Curso-de-Ingl-s/issues"
+  },
+  "homepage": "https://github.com/diogenesjup/Welbe-Curso-de-Ingl-s#readme"
+}
