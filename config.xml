@@ -65,14 +65,17 @@
     <!--<plugin name="cordova-plugin-splashscreen" />-->
     <plugin name="cordova-plugin-statusbar" />
     <plugin name="cordova-plugin-media-capture" />
-    <plugin name="cordova-plugin-wkwebview-engine" />
-    <plugin name="cordova-plugin-wkwebview-file-xhr"  source="npm" /> 
     
+    <plugin name="cordova-plugin-ionic-webview" />
+
     <preference name="WKWebViewOnly" value="true" />
     <feature name="CDVWKWebViewEngine">
        <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
-    
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <preference name="Scheme" value="https" />
+    <preference name="ScrollEnabled" value="true" />
+
     <!-- PERMISSAO DO MICROFONE -->
     <plugin name="cordova-plugin-ios-camera-permissions" source="npm" />
     
