@@ -41,9 +41,6 @@
     <!-- STATUS BAR TRANSPARENTE -->
     <preference name="StatusBarBackgroundColor" value="#0a4cae" />
     
-
-    <preference name="deployment-target" value="11.0.0" />
-
     <preference name="SplashScreenDelay" value="1" />  
     <preference name="AutoHideSplashScreen" value="true" />  
     <preference name="SplashScreen" value="none" />  
@@ -54,24 +51,10 @@
     <preference name="FadeSplashScreen" value="false"/>
     <preference name="FadeSplashScreenDuration" value="1200"/>
     
-    <plugin name="cordova-android-support-gradle-release">
-       <variable name="ANDROID_SUPPORT_VERSION" value="15.0.0"/>
-    </plugin>
-   
+    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-targetSdkVersion" value="29" />
 
-   <preference name="deployment-target" value="13.4.1" />
-
-    
-   <preference name="android-minSdkVersion" value="19" />
-   <preference name="android-targetSdkVersion" value="29" />
-   
-    
-    <preference name="phonegap-version" value="cli-9.0.0" />
-    <preference name='pgb-builder-version' value='1' />
-    <!-- Plugins -->
-
-    <!-- Core plugins  -->
-       
+    <!-- Core plugins  -->   
     <!--<plugin name="cordova-plugin-camera" spec="~2.4.1"  />--> <!--spec="~2.4.1"  -->
     <!-- <plugin name="cordova-plugin-file"   />   -->
     <!--<plugin name="cordova-plugin-file-transfer" spec="~1.6.1" /> --> <!-- spec="~1.6.1"  -->
@@ -79,10 +62,9 @@
     <plugin name="cordova-plugin-android-permissions" />
     <!--<preference name="android-build-tool" value="gradle" />-->
     
-   
     <!--<plugin name="cordova-plugin-splashscreen" />-->
     <plugin name="cordova-plugin-statusbar" />
-
+    <plugin name="cordova-plugin-media-capture" />
     <plugin name="cordova-plugin-wkwebview-engine" />
     <plugin name="cordova-plugin-wkwebview-file-xhr"  source="npm" /> 
     
@@ -90,9 +72,9 @@
     <feature name="CDVWKWebViewEngine">
        <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
-
-
     
+    <!-- PERMISSAO DO MICROFONE -->
+    <plugin name="cordova-plugin-ios-camera-permissions" source="npm" />
     
     <!--
     <feature name="Camera">
@@ -183,5 +165,9 @@
         <allow-intent href="*" />
         <access origin="*" />
     </platform>
+
+    <edit-config target="NSMicrophoneUsageDescription" file="*-Info.plist" mode="merge">
+        <string>need microphone access to record sounds</string>
+    </edit-config>
 
 </widget>

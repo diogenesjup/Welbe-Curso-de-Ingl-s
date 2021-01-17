@@ -51,6 +51,19 @@
             }
           });
 
+          $("#swipemeFinalizacao").swipe({
+            swipe:function(event, direction, distance, duration, fingerCount) {
+
+              if(direction=="down"){
+
+                $(".modal-finalizacao .confirmacao").css("bottom","-300%");
+                $(".modal-finalizacao").fadeOut(500);
+
+              }
+
+            }
+          });
+
 
 
             /* FUNÇÃO GERAL PARA EXIBIR OS AVISOS DO PÁGINA */
@@ -102,7 +115,30 @@
                  $(".modal-confirmacao").fadeOut(500);
 
             }
+           
 
+           function finalizacao(mensagem){
+
+              console.log("%c COMEÇANDO FUNÇÃO PARA EXIBIR AVISO FINALIZACAO","background:#ff0000;color:#fff;");
+              $(".modal-finalizacao").fadeIn(100);
+
+              $(".modal-finalizacao .confirmacao").css("bottom","0");
+
+
+              // ALIMENTAR O HTML
+              
+              $(".modal-finalizacao .confirmacao p#finalizacaoTexto").html(mensagem);
+              
+            
+
+
+            }
+            function fecharFinalizacao(){
+              
+              $(".modal-finalizacao .confirmacao").css("bottom","-300%");
+              $(".modal-finalizacao").fadeOut(500);
+
+            }
 
 
 

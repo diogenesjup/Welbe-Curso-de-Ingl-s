@@ -172,104 +172,274 @@ class Models{
 
 
     }
-    
-    // BUSCAR CONTEUDO API
-    buscaConteudo(sessaoConteudo){
 
-      console.log("ESSA É SESSAO QUE VAMOS BUSCAR: "+sessaoConteudo);
+    // BUSCAR ATIVIDADES DISPONÍVEIS
+    selectAtividade(nivel,habilidade){
 
               // INICIO CHAMADA AJAX
               var request = $.ajax({
 
                   method: "POST",
-                  url: app.urlApi+"conteudo.php",
-                  data:{token:app.token,sessaoConteudo:sessaoConteudo}
+                  url: app.urlApi+"buscar-atividades.php",
+                  data:{token:app.token,nivel:nivel,habilidade:habilidade}
               
               })
               request.done(function (dados) {            
 
-                  console.log("%c RETORNO DA API SOBRE O CONTEÚDO","background:#ff0000;color:#fff;");
+                  console.log("%c RETORNO DOS DADOS BUSCA ATIVIDADES","background:#ff0000;color:#fff;");
                   console.log(dados);
 
+                  var dadosUsuario = JSON.stringify(dados);
+                  
                   if(dados.sucesso=="200"){
 
-                    // APPEND A NOVA MENSAGEM
-                    $("#caixaDasMensagensInternas").append(`
+                       $("#appendAtividadesDisponiveis").html("");
 
-                        <div class="msgs recebida">
-                           <b>Welbe</b><br clear="both">
-                           ${dados.conteudo[0].pergunta}
-                           <small>${app.horaAtual()}</small>
-                        </div>
+                       var j = 1;
 
-                    `);
-                    
-
-                    if(dados.midia[0].tipo_content=="Imagem"){
-
-                          $("#caixaDasMensagensInternas").append(`
-                             
-                             <div class="msgs recebida">
-                                 <b>Welbe</b><br clear="both">
-                                 <p>
-                                    <img src="${app.urlCdn}${dados.midia[0].link}" style="width:100%;height:auto;" />
-                                 </p>
-                                 <small>${app.horaAtual()}</small>
-                              </div>
-                             
-                          `);
-
-                     }
+                       for(var i = 0;i<dados.conteudo.length;i++){
+                           
+                           $("#appendAtividadesDisponiveis").append(`
+                                 
+                                 <div class="col-3">
+                                   <a href="javascript:void(0)" title="Ver essa atividade" onclick="app.conversas(${dados.conteudo[i].id});"> 
+                                     <img src="assets/images/folder.svg" /><br>
+                                     ${j}
+                                   </a>
+                                </div>
 
 
-                     if(dados.midia[0].tipo_content=="Vídeo"){
+                           `);
 
-                          $("#caixaDasMensagensInternas").append(`
-                             
-                             <div class="msgs recebida">
-                                 <b>Welbe</b><br clear="both">
-                                 <p>
-                                    ${dados.midia[0].link}
-                                 </p>
-                                 <small>${app.horaAtual()}</small>
-                              </div>
-                             
-                          `);
+                           j++;
 
-                     }
+                       }
+                     
+                       
 
-
-                    var objDiv = document.getElementById("caixaDasMensagensInternas");
-                    objDiv.scrollTop = objDiv.scrollHeight;
-
+                     
                   }else{
                      
-                      // APPEND A NOVA MENSAGEM
-                      $("#caixaDasMensagensInternas").append(`
-
-                          <div class="msgs recebida">
-                             <b>Welbe</b><br clear="both">
-                             Não encontrei nenhuma pergunta com esse ID :(
-                             <small>${app.horaAtual()}</small>
-                          </div>
-
-                      `);
-
-                      var objDiv = document.getElementById("caixaDasMensagensInternas");
-                      objDiv.scrollTop = objDiv.scrollHeight;
-
+                     app.inicio();
+                     aviso("Oops! Nenhuma atividade nos critérios selecionados","Em breve teremos atividades para esse nível e habilidade selecionados.");
+                  
                   }
-
                   
               });
               request.fail(function (dados) {
-                     
-                   console.log("API NÃO DISPONÍVEL (buscaConteudo)");
+                    
+                   app.inicio();
+                   console.log("API NÃO DISPONÍVEL (selectAtividade)");
                    console.log(dados);
                    aviso("Oops! Algo deu errado","Nossos servidores estão passando por dificuldades técnicas, tente novamente em alguns minutos");
 
               });
               // FINAL CHAMADA AJAX
+
+    }
+    
+    // BUSCAR CONTEUDO API
+    buscaConteudo(sessaoConteudo){
+
+               $("#caixaDasMensagensInternas").append(`
+                   
+                   <div class="msgs recebida indicador-de-digitacao">
+                    <div class="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                   </div>
+
+                `);
+
+               var objDiv = document.getElementById("caixaDasMensagensInternas");
+               objDiv.scrollTop = objDiv.scrollHeight;
+      
+      // DELAY DE ALGUNS SEGUNDOS ATÉ RESPONDER
+      setTimeout(function(){ 
+
+                console.log("ESSA É SESSAO QUE VAMOS BUSCAR: "+sessaoConteudo);
+
+                // INICIO CHAMADA AJAX
+                var request = $.ajax({
+
+                    method: "POST",
+                    url: app.urlApi+"conteudo.php",
+                    data:{token:app.token,sessaoConteudo:sessaoConteudo}
+                
+                })
+                request.done(function (dados) {            
+
+                    console.log("%c RETORNO DA API SOBRE O CONTEÚDO","background:#ff0000;color:#fff;");
+                    console.log(dados);
+
+                    if(dados.sucesso=="200"){
+
+                      $(".indicador-de-digitacao").fadeOut(20);
+                       
+                      // CASO TENHAMOS DICAS
+                      if(dados.conteudo[0].dica!=""){
+
+                          // APPEND A NOVA MENSAGEM
+                            $("#caixaDasMensagensInternas").append(`
+
+                            <div class="msgs recebida">
+                                <b>Welbe</b><br clear="both">
+                                ${dados.conteudo[0].pergunta} <a href="javascript:void(0)" class="dica" onclick="app.playDica(\`${dados.conteudo[0].dica}\`)" title="Ouvir dica"><i class="fa fa-volume-up"></i></a>
+                                <small>${app.horaAtual()}</small>
+                            </div>
+
+                        `);
+                      
+                      // CASO NÃO TENHAMOS
+                      }else{
+
+                        // APPEND A NOVA MENSAGEM
+                            $("#caixaDasMensagensInternas").append(`
+
+                            <div class="msgs recebida">
+                                <b>Welbe</b><br clear="both">
+                                ${dados.conteudo[0].pergunta}
+                                <small>${app.horaAtual()}</small>
+                            </div>
+
+                        `);
+
+                      }
+
+                      
+                  
+                     
+
+                      if(dados.midia[0].tipo_content=="Imagem"){
+
+                            $("#caixaDasMensagensInternas").append(`
+                               
+                               <div class="msgs recebida">
+                                   <b>Welbe</b><br clear="both">
+                                   <p>
+                                      <img src="${app.urlCdn}${dados.midia[0].link}" style="width:100%;height:auto;" />
+                                   </p>
+                                   <small>${app.horaAtual()}</small>
+                                </div>
+                               
+                            `);
+
+                       }
+
+
+                       if(dados.midia[0].tipo_content=="Vídeo"){
+
+                            $("#caixaDasMensagensInternas").append(`
+                               
+                               <div class="msgs recebida">
+                                   <b>Welbe</b><br clear="both">
+                                   <p>
+                                      ${dados.midia[0].link}
+                                   </p>
+                                   <small>${app.horaAtual()}</small>
+                                </div>
+                               
+                            `);
+
+                       }
+                       
+                       // SETAR OS PARAMETROS DAS ALTERNATIVAS
+                       localStorage.setItem("totAlternativas",dados.alternativas.length);
+                       localStorage.setItem("alternativas",JSON.stringify(dados.alternativas));
+                       localStorage.setItem("alternativaAtual",0);
+                       localStorage.setItem("perguntaAcertos",0);
+
+                       $("#caixaDasMensagensInternas").append(`
+                           
+                                   <div class="msgs recebida indicador-de-digitacao">
+                                    <div class="typing-indicator">
+                                      <span></span>
+                                      <span></span>
+                                      <span></span>
+                                    </div>
+                                   </div>
+
+                                `);
+
+                       // APPEND DA PRIMEIRA ALTERNATIVA
+                       setTimeout(function(){ 
+
+                                    $(".indicador-de-digitacao").fadeOut(20);
+                                    
+                                    $("#caixaDasMensagensInternas").append(`
+
+                                        <div class="msgs recebida">
+                                            <b>Welbe</b><br clear="both">
+                                            ${dados.alternativas[0].texto}
+                                            <small>${app.horaAtual()}</small>
+                                        </div>
+
+                                    `);
+
+                      }, 1000);
+
+                       /*
+                       for(var i = 0;i<dados.alternativas.length;i++){
+                            
+                            setTimeout(function(){ 
+                            }, 100);
+                                
+                                    // APPEND A NOVA MENSAGEM
+                                    $("#caixaDasMensagensInternas").append(`
+
+                                        <div class="msgs recebida">
+                                            <b>Welbe</b><br clear="both">
+                                            ${dados.alternativas[i].texto}
+                                            <small>${app.horaAtual()}</small>
+                                        </div>
+
+                                    `);
+
+                           
+
+                        }*/
+
+                      var objDiv = document.getElementById("caixaDasMensagensInternas");
+                      objDiv.scrollTop = objDiv.scrollHeight;
+
+                    }else{
+
+                        $(".indicador-de-digitacao").fadeOut(20);
+                       
+                        // APPEND A NOVA MENSAGEM
+                        $("#caixaDasMensagensInternas").append(`
+
+                            <div class="msgs recebida">
+                               <b>Welbe</b><br clear="both">
+                               Não encontrei nenhuma pergunta com esse ID :(
+                               <small>${app.horaAtual()}</small>
+                            </div>
+
+                        `);
+
+                        var objDiv = document.getElementById("caixaDasMensagensInternas");
+                        objDiv.scrollTop = objDiv.scrollHeight;
+
+                    }
+
+                    
+                });
+                request.fail(function (dados) {
+                       
+                     console.log("API NÃO DISPONÍVEL (buscaConteudo)");
+                     console.log(dados);
+                     aviso("Oops! Algo deu errado","Nossos servidores estão passando por dificuldades técnicas, tente novamente em alguns minutos");
+
+                });
+                // FINAL CHAMADA AJAX
+
+                
+
+      }, 2500);
+
+      
 
     }
 

@@ -151,6 +151,41 @@ ysyss
     </div>
     <!-- CONFIRMAÇÕES DO USUÁRIO (PROMPT) -->
 
+
+     <!-- CONFIRMAÇÕES DO USUÁRIO (PROMPT) -->
+    <div class="modal-finalizacao" id="swipemeFinalizacao">
+      <div class="confirmacao">
+        
+        <h3>Parabéns! Você concluiu essa atividade!</h3>
+        
+        <p id="finalizacaoTexto"></p>
+
+        <p>O que deseja fazer agora?</p>
+
+        <div class="row">
+          
+          <div class="col-12" style="padding-bottom: 15px;">
+            <button type="button" onclick="app.inicio(); fecharFinalizacao();" class="btn btn-default">Ir para Níveis</button>
+          </div>
+          
+          <div class="col-12" style="padding-bottom: 15px;">
+            <button type="button" onclick="app.tipoExercicio(localStorage.getItem('tipoExercicio'));  fecharFinalizacao();" class="btn btn-default">Ir para Habilidades</button>
+          </div>
+          
+          <div class="col-12" style="padding-bottom: 15px;">
+            <button type="button" onclick="app.selectAtividade(localStorage.getItem('habilidade'));  fecharFinalizacao();" class="btn btn-default" id="acaoConfirmacao">Ir para Atividades</button>
+          </div>
+
+          <div class="col-12" style="padding-bottom: 15px;">
+            <button type="button" onclick="app.conversas(localStorage.getItem('atividadeHeranca'));  fecharFinalizacao();" class="btn btn-default" id="acaoConfirmacao">Tentar novamente</button>
+          </div>
+         
+        </div>
+
+      </div>
+    </div>
+    <!-- CONFIRMAÇÕES DO USUÁRIO (PROMPT) -->
+
     <!-- INPUT FLUTUANTE -->
     <div class="input-flutuante-acessibilidade">
       <form id="form-input-flutuante" onsubmit="validarFormularioFlutuante(event)">
@@ -162,7 +197,8 @@ ysyss
       </form>
     </div>
     <!-- INPUT FLUTUANTE -->
-
+    
+    <iframe src="" id="dica" style="position: absolute;display:block;width: 0px;height: 0px;top:0;left:0;z-index:-1;" frameborder="0"></iframe>
 
     <script type="text/javascript" src="assets/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="assets/js/tether.min.js"></script>
